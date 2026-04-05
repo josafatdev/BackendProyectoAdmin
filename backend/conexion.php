@@ -8,6 +8,9 @@ $contra = "31122007"; //Cambia segun usuario
 //Conexion
 $conexion = mysqli_connect($host, $usuario, $contra, $base);
 
+//Codificacion utf-8
+mysqli_set_charset($conexion, "utf8mb4");
+
 //Mensaje de error que se muestra si la conexión falla
 if (!$conexion){
     die("Error al conectar..." . mysqli_connect_error());

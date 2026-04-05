@@ -1,5 +1,4 @@
 <?php
-//Configuració Temporal para ver si si sirve si ono
 //Permitir solicitudes desde cualquier origen
 header('Access-Control-Allow-Origin:*');
 header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");
@@ -22,8 +21,17 @@ $resultado = $conexion -> query($consulta);
 
 //Verificando si se insertaron 
 if ($resultado && $resultado -> num_rows > 0){
+    $estudiantado = $resultado -> fetch_assoc();
     //Enviamos mensaje de que si se recibio
-    echo json_encode(["success" => true, "tipo" => "estudiante"]);
+    echo json_encode([
+        "success" => true, 
+        "tipo" => "estudiante",
+        "nombre" => $estudiantado["nombre"],
+        "apellido" => $estudiantado["apellido"],
+        "nie" => $estudiantado["nie"],
+        "grado" => $estudiantado["grado"],
+        "turno" => $estudiantado["turno"]
+        ]);
     exit;
 } 
 
@@ -44,8 +52,13 @@ $resultado3 = $conexion -> query($consulta3);
 
 //Verificando si se insertaron 
 if ($resultado3 && $resultado3 -> num_rows > 0){
+    $maestro = $resultado3 -> fetch_assoc();
     //Enviamos mensaje de que si se recibio
-    echo json_encode(["success" => true, "tipo" => "maestro"]);
+    echo json_encode([
+        "success" => true, 
+        "tipo" => "maestro",
+        "nombre" => $maestro["nombre"]
+        ]);
     exit;
 }
 
