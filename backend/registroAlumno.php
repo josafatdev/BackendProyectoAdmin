@@ -22,6 +22,11 @@ $resultado = $conexion -> query($consulta);
 //Verificando si se insertaron 
 if ($resultado && $resultado -> num_rows > 0){
     $estudiantado = $resultado -> fetch_assoc();
+
+    //Contando deméritos para redirección de menús.
+    $contarDeme = $conexion -> query("SELECT COUNT(*) as total FROM Demeritos WHERE id_estudiante = ".$estudiantado["id"]);
+    $totalDeme = ($contarDeme && $contarDeme -> num_rows > 0) ? $contarDeme -> fetch_assoc()["total"] : 0;
+
     //Enviamos mensaje de que si se recibio
     echo json_encode([
         "success" => true, 
@@ -30,7 +35,9 @@ if ($resultado && $resultado -> num_rows > 0){
         "apellido" => $estudiantado["apellido"],
         "nie" => $estudiantado["nie"],
         "grado" => $estudiantado["grado"],
-        "turno" => $estudiantado["turno"]
+        "turno" => $estudiantado["turno"],
+        "tiene_demeritos" => ($totalDeme > 0),
+        "total_demeritos" => $totalDeme
         ]);
     exit;
 } 
@@ -57,6 +64,7 @@ if ($resultado3 && $resultado3 -> num_rows > 0){
     echo json_encode([
         "success" => true, 
         "tipo" => "maestro",
+        "id" => $maestro['id'],
         "nombre" => $maestro["nombre"]
         ]);
     exit;
