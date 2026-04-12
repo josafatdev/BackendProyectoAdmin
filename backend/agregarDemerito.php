@@ -1,11 +1,9 @@
 <?php
-// 👇 DEBUG: Forzar que los errores se guarden en el log de Apache
-error_reporting(E_ALL);
-ini_set('display_errors', 0);  // No mostrar en pantalla para no romper JSON
-ini_set('log_errors', 1);
-
-// Headers mínimos
-header('Content-Type: application/json');
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE");
+header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, Accept, Origin");
+header("Access-Control-Max-Age: 86400");
+header("Content-Type: application/json");
 
 // Limpiar cualquier buffer previo
 while (@ob_get_level()) { @ob_end_clean(); }

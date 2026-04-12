@@ -1,4 +1,8 @@
 <?php
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
+
 //Datos de Conexión
 $host = "localhost"; //Siempre localhost
 $base = "Escuela";  //Cambia segun nombre de DB
