@@ -1,5 +1,4 @@
 <?php
-//Configuració Temporal para ver si si sirve si ono
 //Permitir solicitudes desde cualquier origen
 header('Access-Control-Allow-Origin:*');
 header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");
@@ -16,9 +15,10 @@ $datos = json_decode(file_get_contents('php://input'), true);
 $nombre = $datos['nombreMaestro']; //El nombre dentro de los corchetes
 $edad = $datos['edadMaestro'];
 $espc = $datos['especialidad'];
+$contra = $datos['contra'];
 
 //Se insertan los datos
-$mariadb = "INSERT INTO Profesor (nombre, edad, especialidad) VALUES ('$nombre', '$edad', '$espc')";
+$mariadb = "INSERT INTO Profesor (nombre, edad, especialidad, contra) VALUES ('$nombre', '$edad', '$espc', '$contra')";
 
 //Verificando si se insertaron
 if ($conexion -> query($mariadb)){

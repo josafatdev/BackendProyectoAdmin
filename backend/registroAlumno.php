@@ -31,6 +31,7 @@ if ($resultado && $resultado -> num_rows > 0){
     echo json_encode([
         "success" => true, 
         "tipo" => "estudiante",
+        "id" => $estudiantado["id"],
         "nombre" => $estudiantado["nombre"],
         "apellido" => $estudiantado["apellido"],
         "nie" => $estudiantado["nie"],

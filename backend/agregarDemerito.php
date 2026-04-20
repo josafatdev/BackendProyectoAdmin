@@ -1,30 +1,15 @@
 <?php
+//Permitir solicitudes desde cualquier origen
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, Accept, Origin");
 header("Access-Control-Max-Age: 86400");
 header("Content-Type: application/json");
 
-// Limpiar cualquier buffer previo
-while (@ob_get_level()) { @ob_end_clean(); }
-
-// 👇 LOG 1: Inicio del script
-error_log("[DEMERITO] Script iniciado");
-
-// 👇 LOG 2: Verificar que conexion.php existe
-if (!file_exists("conexion.php")) {
-    error_log("[DEMERITO] ERROR: conexion.php no encontrado en: " . getcwd());
-    http_response_code(500);
-    echo json_encode(["success" => false, "error" => "config_error"]);
-    exit;
-}
-error_log("[DEMERITO] conexion.php encontrado");
-
-// 👇 LOG 3: Intentar incluir conexion.php
+// Intentar incluir conexion.php
 require_once("conexion.php");
-error_log("[DEMERITO] conexion.php incluido");
 
-// 👇 LOG 4: Verificar que $conexion existe y es válido
+// Verificar que $conexion existe y es válido
 if (!isset($conexion) || !$conexion) {
     error_log("[DEMERITO] ERROR: \$conexion no está definida o es null");
     http_response_code(500);
@@ -33,7 +18,7 @@ if (!isset($conexion) || !$conexion) {
 }
 error_log("[DEMERITO] \$conexion válida");
 
-// 👇 LOG 5: Leer input
+// Leer input
 $rawInput = file_get_contents('php://input');
 $datos = json_decode($rawInput, true);
 error_log("[DEMERITO] Input recibido: " . substr($rawInput, 0, 200));
@@ -45,7 +30,7 @@ if (!$datos || !isset($datos["id_estudiante"])) {
     exit;
 }
 
-// 👇 LOG 6: Sanitizar (aquí suele fallar si $conexion no es mysqli)
+
 try {
     $id_estudiante = (int)$datos["id_estudiante"];
     $descripcion = $conexion->real_escape_string($datos["descripcion"] ?? "");
@@ -64,7 +49,6 @@ if (!empty($datos["acciones"]) && is_array($datos["acciones"])) {
     $acciones = $conexion->real_escape_string(json_encode($datos["acciones"], JSON_UNESCAPED_UNICODE));
 }
 
-// 👇 LOG 7: Ejecutar query
 $consulta = "INSERT INTO Demeritos (id_estudiante, id_profesor, descripcion, fecha, responsable, acciones_correctivas) 
              VALUES ($id_estudiante, NULL, '$descripcion', '$fecha', '$responsable', '$acciones')";
 error_log("[DEMERITO] Query: $consulta");
@@ -80,6 +64,4 @@ if ($resultado === TRUE) {
 }
 
 $conexion->close();
-error_log("[DEMERITO] Script finalizado");
-exit;
 ?>
